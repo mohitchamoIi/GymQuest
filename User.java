@@ -12,9 +12,12 @@ public class User {
     public void addXP(int gainedXP) {
         this.xp += gainedXP;
 
-        if (this.xp >= 100) {
+        int requiredXP = level * 100;
+
+        while (this.xp >= requiredXP) {
+            this.xp -= requiredXP;
             this.level++;
-            this.xp = this.xp - 100;
+            requiredXP = level * 100;
         }
     }
 }
