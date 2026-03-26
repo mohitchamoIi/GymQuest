@@ -58,4 +58,20 @@ public class DBManager {
             e.printStackTrace();
         }
     }
+    public static ResultSet getLeaderboard() {
+        try {
+            Connection con = getConnection();
+
+            PreparedStatement ps = con.prepareStatement(
+                    "SELECT name, level, xp FROM users ORDER BY level DESC, xp DESC LIMIT 10"
+            );
+
+            return ps.executeQuery();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

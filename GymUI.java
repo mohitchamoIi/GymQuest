@@ -8,6 +8,7 @@ public class GymUI {
     JLabel statusLabel;
     JProgressBar progressBar;
     JButton startBtn, workoutBtn;
+    JButton leaderboardBtn;
 
     User user;
 
@@ -19,6 +20,13 @@ public class GymUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
+
+        leaderboardBtn = new JButton("Leaderboard");
+        leaderboardBtn.setBackground(new Color(255, 140, 0));
+        leaderboardBtn.setForeground(Color.WHITE);
+        leaderboardBtn.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        leaderboardBtn.setFocusPainted(false);
+
 
         // SIDEBAR (MINIMAL)
         JPanel sidebar = new JPanel();
@@ -34,6 +42,7 @@ public class GymUI {
 
         sidebar.add(logo);
         sidebar.add(workoutBtn);
+        sidebar.add(leaderboardBtn);
 
         // MAIN
         JPanel main = new JPanel();
@@ -68,7 +77,7 @@ public class GymUI {
         // ACTIONS (FIXED)
         startBtn.addActionListener(e -> handleWorkout());
         workoutBtn.addActionListener(e -> handleWorkout());
-
+        leaderboardBtn.addActionListener(e -> new LeaderboardUI());
         frame.setVisible(true);
     }
 
