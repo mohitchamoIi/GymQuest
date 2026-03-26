@@ -1,11 +1,13 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 
 public class GymUI {
+
     JFrame frame;
-    JLabel label;
-    JButton button;
+    JLabel statusLabel;
     JProgressBar progressBar;
+    JButton startBtn, workoutBtn;
 
     User user;
 
@@ -13,71 +15,109 @@ public class GymUI {
         this.user = user;
 
         frame = new JFrame("GymQuest");
-        frame.setSize(350, 250);
-        frame.setLayout(null);
+        frame.setSize(700, 400);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
+        frame.setLocationRelativeTo(null);
 
-        label = new JLabel(getStatus());
-        label.setBounds(50, 20, 250, 30);
+        // SIDEBAR (MINIMAL)
+        JPanel sidebar = new JPanel();
+        sidebar.setPreferredSize(new Dimension(120, 400));
+        sidebar.setBackground(new Color(30, 30, 30));
+        sidebar.setLayout(new GridLayout(3, 1));
 
-        button = new JButton("Add Workout");
-        button.setBounds(90, 70, 150, 30);
+        JLabel logo = new JLabel("Gym", JLabel.CENTER);
+        logo.setForeground(Color.WHITE);
+
+        workoutBtn = new JButton("Workout");
+        styleBtn(workoutBtn);
+
+        sidebar.add(logo);
+        sidebar.add(workoutBtn);
+
+        // MAIN
+        JPanel main = new JPanel();
+        main.setBackground(new Color(245, 245, 245));
+        main.setLayout(new GridBagLayout());
+
+        JPanel card = new JPanel();
+        card.setPreferredSize(new Dimension(300, 180));
+        card.setBackground(Color.WHITE);
+        card.setLayout(new GridLayout(3, 1, 10, 10));
+        card.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+
+        statusLabel = new JLabel(getStatus(), JLabel.CENTER);
 
         progressBar = new JProgressBar(0, user.level * 100);
-        progressBar.setBounds(50, 130, 250, 25);
         progressBar.setValue(user.xp);
         progressBar.setStringPainted(true);
 
-        button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        startBtn = new JButton("Start Workout");
+        startBtn.setBackground(new Color(0, 120, 215));
+        startBtn.setForeground(Color.WHITE);
 
-                try {
-                    String[] exercises = {"Pushups", "Squats", "Pullups"};
-                    String exercise = (String) JOptionPane.showInputDialog(
-                            frame,
-                            "Select Exercise",
-                            "Workout",
-                            JOptionPane.QUESTION_MESSAGE,
-                            null,
-                            exercises,
-                            exercises[0]
-                    );
+        card.add(statusLabel);
+        card.add(progressBar);
+        card.add(startBtn);
 
-                    int reps = Integer.parseInt(JOptionPane.showInputDialog("Reps:"));
-                    int sets = Integer.parseInt(JOptionPane.showInputDialog("Sets:"));
+        main.add(card);
 
-                    Workout w = new Workout(exercise, reps, sets);
-                    int xp = XPSystem.calculateXP(w);
+        frame.add(sidebar, BorderLayout.WEST);
+        frame.add(main, BorderLayout.CENTER);
 
-                    user.addXP(xp);
+        // ACTIONS (FIXED)
+        startBtn.addActionListener(e -> handleWorkout());
+        workoutBtn.addActionListener(e -> handleWorkout());
 
-                    label.setText(getStatus());
-
-                    progressBar.setMaximum(user.level * 100);
-                    progressBar.setValue(user.xp);
-
-                    String achievement = Achievement.check(user);
-                    if (!achievement.equals("")) {
-                        JOptionPane.showMessageDialog(frame, achievement);
-                    }
-
-                    FileManager.saveUser(user);
-
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(frame, "Invalid input!");
-                }
-            }
-        });
-
-        frame.add(label);
-        frame.add(button);
-        frame.add(progressBar);
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
 
+    private void styleBtn(JButton btn) {
+        btn.setFocusPainted(false);
+        btn.setBackground(new Color(50, 50, 50));
+        btn.setForeground(Color.WHITE);
+    }
+
+    private void handleWorkout() {
+        try {
+            String[] exercises = {"Pushups", "Squats", "Pullups"};
+
+            String exercise = (String) JOptionPane.showInputDialog(
+                    frame,
+                    "Exercise",
+                    "Workout",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    exercises,
+                    exercises[0]
+            );
+
+            if (exercise == null) return;
+
+            int reps = Integer.parseInt(JOptionPane.showInputDialog("Reps:"));
+            int sets = Integer.parseInt(JOptionPane.showInputDialog("Sets:"));
+
+            Workout w = new Workout(exercise, reps, sets);
+            int xp = XPSystem.calculateXP(w);
+
+            user.addXP(xp);
+
+            updateUIData();
+
+            FileManager.saveUser(user);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(frame, "Invalid input");
+        }
+    }
+
+    private void updateUIData() {
+        statusLabel.setText(getStatus());
+        progressBar.setMaximum(user.level * 100);
+        progressBar.setValue(user.xp);
+    }
+
     private String getStatus() {
-        int requiredXP = user.level * 100;
-        return "Level: " + user.level + " | XP: " + user.xp + "/" + requiredXP;
+        return "Level " + user.level + " | XP " + user.xp + "/" + (user.level * 100);
     }
 }
