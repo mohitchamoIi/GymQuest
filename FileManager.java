@@ -4,7 +4,7 @@ public class FileManager {
 
     public static void saveUser(User user) {
         try {
-            FileWriter fw = new FileWriter("data.txt");
+            FileWriter fw = new FileWriter(user.name + ".txt");
             fw.write(user.name + "," + user.xp + "," + user.level);
             fw.close();
         } catch (Exception e) {
@@ -12,9 +12,9 @@ public class FileManager {
         }
     }
 
-    public static User loadUser() {
+    public static User loadUser(String name) {
         try {
-            BufferedReader br = new BufferedReader(new FileReader("data.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(name + ".txt"));
             String line = br.readLine();
             br.close();
 
@@ -26,9 +26,9 @@ public class FileManager {
                 return user;
             }
         } catch (Exception e) {
-            System.out.println("No previous data found");
+            System.out.println("New user created");
         }
 
-        return new User("Player");
+        return new User(name);
     }
 }
