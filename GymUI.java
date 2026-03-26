@@ -104,7 +104,7 @@ public class GymUI {
 
             updateUIData();
 
-            FileManager.saveUser(user);
+            DBManager.saveUser(user);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame, "Invalid input");

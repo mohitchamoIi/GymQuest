@@ -80,7 +80,7 @@ public class LoginUI {
             return;
         }
 
-        User user = FileManager.loadUser(name);
+        User user = DBManager.loadUser(name);
 
         frame.dispose(); // close login
         new GymUI(user); // open main app
