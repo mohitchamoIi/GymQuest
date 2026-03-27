@@ -74,4 +74,43 @@ public class DBManager {
 
         return null;
     }
+    public static void saveWorkout(User user, Workout w, int xp) {
+        try {
+            Connection con = getConnection();
+
+            PreparedStatement ps = con.prepareStatement(
+                    "INSERT INTO workouts (name, exercise, reps, sets, xp) VALUES (?, ?, ?, ?, ?)"
+            );
+
+            ps.setString(1, user.name);
+            ps.setString(2, w.exercise);
+            ps.setInt(3, w.reps);
+            ps.setInt(4, w.sets);
+            ps.setInt(5, xp);
+
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static ResultSet getWorkoutHistory(String name) {
+        try {
+            Connection con = getConnection();
+
+            PreparedStatement ps = con.prepareStatement(
+                    "SELECT exercise, reps, sets, xp FROM workouts WHERE name=?"
+            );
+
+            ps.setString(1, name);
+
+            return ps.executeQuery();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }
