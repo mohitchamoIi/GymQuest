@@ -4,7 +4,7 @@ public class DBManager {
 
     static final String URL = "jdbc:mysql://localhost:3306/gymquest";
     static final String USER = "root";
-    static final String PASSWORD = "Gym1234"; // confidential
+    static final String PASSWORD = "ye thodi push krunga mai :)"; // confidential
 
     public static Connection getConnection() throws Exception {
         return DriverManager.getConnection(URL, USER, PASSWORD);
