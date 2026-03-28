@@ -79,6 +79,13 @@ public class LoginUI {
             JOptionPane.showMessageDialog(frame, "Enter your name");
             return;
         }
+        double weight = Double.parseDouble(JOptionPane.showInputDialog("Enter weight (kg):"));
+        double height = Double.parseDouble(JOptionPane.showInputDialog("Enter height (m):"));
+
+        double bmi = BMICalculator.calculateBMI(weight, height);
+        String result = BMICalculator.getCategory(bmi);
+
+        JOptionPane.showMessageDialog(frame, "BMI: " + bmi + "\n" + result);
 
         User user = DBManager.loadUser(name);
 
