@@ -4,9 +4,9 @@ public class BMICalculator {
         return weight / (height * height);
     }
 
-    public static String getCategory(double bmi) {
-        if (bmi < 18.5) return "Underweight → Bulk";
-        else if (bmi < 24.9) return "Normal → Maintain";
-        else return "Overweight → Cut";
+    public static String getGoal(double bmi) {
+        if (bmi < 18.5) return "Bulk";
+        else if (bmi < 24.9) return "Maintain";
+        else return "Cut";
     }
 }

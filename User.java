@@ -3,10 +3,15 @@ public class User {
     int xp;
     int level;
 
+    double bmi;
+    String goal;
+
     public User(String name) {
         this.name = name;
         this.xp = 0;
         this.level = 1;
+        this.bmi = 0;
+        this.goal = "";
     }
 
     public void addXP(int gainedXP) {
