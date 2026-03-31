@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+
 public class User {
     String name;
     int xp;
@@ -6,12 +8,17 @@ public class User {
     double bmi;
     String goal;
 
+    int streak;
+    LocalDate lastDate;
+
     public User(String name) {
         this.name = name;
         this.xp = 0;
         this.level = 1;
         this.bmi = 0;
         this.goal = "";
+        this.streak = 0;
+        this.lastDate = null;
     }
 
     public void addXP(int gainedXP) {

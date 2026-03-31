@@ -35,7 +35,13 @@ public class DBManager {
             // new user
             User user = new User(name);
             saveUser(user);
+
+            user.streak = rs.getInt("streak");
+
+            Date d = rs.getDate("last_date");
+            if (d != null) user.lastDate = d.toLocalDate();
             return user;
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,7 +56,7 @@ public class DBManager {
             Connection con = getConnection();
 
             PreparedStatement ps = con.prepareStatement(
-                    "REPLACE INTO users (name, xp, level, bmi, goal) VALUES (?, ?, ?, ?, ?)"
+                    "REPLACE INTO users (name, xp, level, bmi, goal, streak, last_date) VALUES (?, ?, ?, ?, ?, ?, ?)"
             );
 
             ps.setString(1, user.name);
@@ -58,6 +64,12 @@ public class DBManager {
             ps.setInt(3, user.level);
             ps.setDouble(4, user.bmi);
             ps.setString(5, user.goal);
+            ps.setInt(6, user.streak);
+
+            if (user.lastDate != null)
+                ps.setDate(7, Date.valueOf(user.lastDate));
+            else
+                ps.setDate(7, null);
 
             ps.executeUpdate();
 

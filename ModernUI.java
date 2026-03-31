@@ -19,7 +19,7 @@ public class ModernUI {
         frame.setSize(950, 600);
         frame.setLayout(new BorderLayout());
 
-        // ================= SIDEBAR =================
+        // SIDEBAR
         sidebar = new JPanel();
         sidebar.setPreferredSize(new Dimension(180, 600));
         sidebar.setBackground(new Color(25, 25, 35));
@@ -36,26 +36,24 @@ public class ModernUI {
         sidebar.add(historyBtn);
         sidebar.add(leaderboardBtn);
 
-        // ================= TOP BAR =================
+        // TOP BAR
         topBar = new JPanel(new BorderLayout());
         topBar.setBackground(Color.WHITE);
-        topBar.setPreferredSize(new Dimension(950, 60));
 
-        JLabel title = new JLabel(getGreeting());
+        JLabel title = new JLabel("Welcome, " + user.name);
         title.setFont(new Font("Segoe UI", Font.BOLD, 18));
         title.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
 
         topBar.add(title, BorderLayout.WEST);
 
-        // ================= MAIN =================
+        // MAIN
         cardLayout = new CardLayout();
-        mainPanel = new GradientPanel();
-        mainPanel.setLayout(cardLayout);
+        mainPanel = new JPanel(cardLayout);
 
         mainPanel.add(createDashboard(), "dashboard");
         mainPanel.add(createWorkoutPanel(), "workout");
 
-        // ================= ACTIONS =================
+        // ACTIONS
         dashboardBtn.addActionListener(e -> switchTab("dashboard", dashboardBtn));
         workoutBtn.addActionListener(e -> switchTab("workout", workoutBtn));
         historyBtn.addActionListener(e -> new HistoryUI(user.name));
@@ -71,15 +69,7 @@ public class ModernUI {
         frame.setVisible(true);
     }
 
-    // ================= GREETING =================
-    private String getGreeting() {
-        int hour = java.time.LocalTime.now().getHour();
-        if (hour < 12) return "Good Morning, " + user.name + " 👋";
-        else if (hour < 18) return "Good Afternoon, " + user.name + " 👋";
-        else return "Good Evening, " + user.name + " 👋";
-    }
-
-    // ================= NAV =================
+    // NAV BUTTON
     private JButton createNav(String text) {
         JButton btn = new JButton(text);
         btn.setMaximumSize(new Dimension(160, 45));
@@ -88,28 +78,13 @@ public class ModernUI {
         btn.setBackground(new Color(25, 25, 35));
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
-        btn.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        btn.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent e) {
-                if (!btn.getBackground().equals(new Color(0, 120, 215)))
-                    btn.setBackground(new Color(50, 50, 70));
-            }
-
-            public void mouseExited(MouseEvent e) {
-                if (!btn.getBackground().equals(new Color(0, 120, 215)))
-                    btn.setBackground(new Color(25, 25, 35));
-            }
-        });
 
         return btn;
     }
 
     private void setActive(JButton active) {
         JButton[] buttons = {dashboardBtn, workoutBtn, historyBtn, leaderboardBtn};
-        for (JButton b : buttons) {
-            b.setBackground(new Color(25, 25, 35));
-        }
+        for (JButton b : buttons) b.setBackground(new Color(25, 25, 35));
         active.setBackground(new Color(0, 120, 215));
     }
 
@@ -118,11 +93,10 @@ public class ModernUI {
         setActive(btn);
     }
 
-    // ================= DASHBOARD =================
+    // DASHBOARD
     private JPanel createDashboard() {
-        JPanel panel = new JPanel(new GridLayout(2, 2, 15, 15));
+        JPanel panel = new JPanel(new GridLayout(3, 2, 15, 15));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        panel.setOpaque(false);
 
         panel.add(createCard("👤 Profile",
                 "BMI: " + String.format("%.2f", user.bmi),
@@ -141,47 +115,41 @@ public class ModernUI {
                 "",
                 ""));
 
+        panel.add(createCard("🔥 Streak",
+                "Days: " + user.streak,
+                "",
+                ""));
+
+        JButton reportBtn = new JButton("Export Report");
+        reportBtn.addActionListener(e -> {
+            ReportGenerator.generate(user);
+            JOptionPane.showMessageDialog(frame, "Report Saved!");
+        });
+
+        panel.add(reportBtn);
+
         return panel;
     }
 
-    // ================= CARD =================
     private JPanel createCard(String title, String l1, String l2, String l3) {
-        RoundedPanel card = new RoundedPanel(20);
-        card.setLayout(new GridLayout(4, 1, 5, 5));
-        card.setBackground(Color.WHITE);
+        JPanel card = new JPanel(new GridLayout(4, 1));
+        card.setBorder(BorderFactory.createTitledBorder(title));
 
-        JLabel t = new JLabel(title);
-        t.setFont(new Font("Segoe UI", Font.BOLD, 14));
-
-        JLabel line1 = new JLabel(l1);
-        JLabel line2 = new JLabel(l2);
-        JLabel line3 = new JLabel(l3);
-
-        // Goal color coding
-        if (l1.contains("Goal")) {
-            if (user.goal.equals("Bulk")) line1.setForeground(new Color(40, 180, 99));
-            if (user.goal.equals("Cut")) line1.setForeground(new Color(220, 53, 69));
-        }
-
-        card.add(t);
-        card.add(line1);
-        card.add(line2);
-        card.add(line3);
+        card.add(new JLabel(l1));
+        card.add(new JLabel(l2));
+        card.add(new JLabel(l3));
 
         return card;
     }
 
     private JPanel createProgressCard() {
-        RoundedPanel card = new RoundedPanel(20);
-        card.setLayout(new GridLayout(4, 1));
-        card.setBackground(Color.WHITE);
+        JPanel card = new JPanel(new GridLayout(4, 1));
+        card.setBorder(BorderFactory.createTitledBorder("📊 Progress"));
 
         JProgressBar bar = new JProgressBar(0, user.level * 100);
         bar.setValue(user.xp);
         bar.setStringPainted(true);
-        bar.setForeground(new Color(0, 120, 215));
 
-        card.add(new JLabel("📊 Progress"));
         card.add(bar);
         card.add(new JLabel("Level " + user.level));
         card.add(new JLabel("XP " + user.xp));
@@ -189,13 +157,10 @@ public class ModernUI {
         return card;
     }
 
-    // ================= WORKOUT =================
     private JPanel createWorkoutPanel() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        JButton start = new JButton("Start Workout");
+        JPanel panel = new JPanel();
 
-        start.setBackground(new Color(0, 120, 215));
-        start.setForeground(Color.WHITE);
+        JButton start = new JButton("Start Workout");
 
         start.addActionListener(e -> handleWorkout());
 
@@ -203,7 +168,7 @@ public class ModernUI {
         return panel;
     }
 
-    // ================= LOGIC =================
+    // 🔥 STEP 5 INCLUDED HERE
     private void handleWorkout() {
         try {
             String[] ex = {"Pushups", "Squats", "Pullups"};
@@ -215,6 +180,12 @@ public class ModernUI {
             int r = Integer.parseInt(JOptionPane.showInputDialog("Reps"));
             int s = Integer.parseInt(JOptionPane.showInputDialog("Sets"));
 
+            // VALIDATION
+            if (r <= 0 || s <= 0) {
+                JOptionPane.showMessageDialog(frame, "Invalid input!");
+                return;
+            }
+
             Workout w = new Workout(e, r, s);
             int xp = XPSystem.calculateXP(w);
 
@@ -223,8 +194,14 @@ public class ModernUI {
 
             user.addXP(xp);
 
+            // 🔥 STREAK UPDATE
+            StreakManager.updateStreak(user);
+
             DBManager.saveWorkout(user, w, xp);
             DBManager.saveUser(user);
+
+            // 🔥 XP POPUP
+            JOptionPane.showMessageDialog(frame, "+" + xp + " XP 🎉");
 
             if (bonus > 0) {
                 JOptionPane.showMessageDialog(frame, "🔥 Challenge Completed!");
@@ -232,41 +209,6 @@ public class ModernUI {
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(frame, "Invalid input");
-        }
-    }
-
-    // ================= GRADIENT BACKGROUND =================
-    class GradientPanel extends JPanel {
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            Graphics2D g2 = (Graphics2D) g;
-
-            GradientPaint gp = new GradientPaint(
-                    0, 0, new Color(240, 242, 245),
-                    0, getHeight(), new Color(220, 225, 230)
-            );
-
-            g2.setPaint(gp);
-            g2.fillRect(0, 0, getWidth(), getHeight());
-        }
-    }
-
-    // ================= ROUNDED PANEL =================
-    class RoundedPanel extends JPanel {
-        int radius;
-
-        RoundedPanel(int r) {
-            radius = r;
-            setOpaque(false);
-        }
-
-        protected void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g;
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_ON);
-
-            g2.setColor(getBackground());
-            g2.fillRoundRect(0, 0, getWidth(), getHeight(), radius, radius);
         }
     }
 }
