@@ -11,6 +11,7 @@ public class User {
     int streak;
     LocalDate lastDate;
 
+    //constructers
     public User(String name) {
         this.name = name;
         this.xp = 0;
