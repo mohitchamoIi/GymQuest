@@ -168,7 +168,6 @@ public class ModernUI {
         return panel;
     }
 
-    // 🔥 STEP 5 INCLUDED HERE
     private void handleWorkout() {
         try {
             String[] ex = {"Pushups", "Squats", "Pullups"};
@@ -194,13 +193,13 @@ public class ModernUI {
 
             user.addXP(xp);
 
-            // 🔥 STREAK UPDATE
+            //  STREAK UPDATE
             StreakManager.updateStreak(user);
 
             DBManager.saveWorkout(user, w, xp);
             DBManager.saveUser(user);
 
-            // 🔥 XP POPUP
+            //  XP POPUP
             JOptionPane.showMessageDialog(frame, "+" + xp + " XP 🎉");
 
             if (bonus > 0) {
