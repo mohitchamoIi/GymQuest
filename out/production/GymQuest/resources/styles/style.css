@@ -1,0 +1,96 @@
+.root {
+    -fx-font-family: "Segoe UI";
+    -fx-background-color: #F5F7FA;
+}
+
+/* ================= LABELS ================= */
+
+.label {
+    -fx-text-fill: #1E1E2F;
+}
+
+.title-text {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+}
+
+.subtitle-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: #666666;
+}
+
+.metric-value {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
+
+/* ================= BUTTONS ================= */
+
+.button {
+    -fx-background-color: #0078D7;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-padding: 10 18;
+}
+
+.button:hover {
+    -fx-background-color: #005FA3;
+}
+
+/* ================= SIDEBAR BUTTONS ================= */
+
+.sidebar-button {
+    -fx-background-color: #2A2A40;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: #3A3A55;
+}
+
+/* ================= CARDS ================= */
+
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-border-color: #E0E0E0;
+    -fx-padding: 20;
+}
+
+/* ================= TABLE ================= */
+
+.table-view {
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #DDDDDD;
+}
+
+.table-view .column-header {
+    -fx-background-color: #F0F2F5;
+}
+
+.table-view .column-header-background {
+    -fx-background-radius: 12 12 0 0;
+}
+
+/* ================= PROGRESS BAR ================= */
+
+.progress-bar > .bar {
+    -fx-background-radius: 10;
+}
+
+/* ================= TEXT FIELD ================= */
+
+.text-field {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #D0D0D0;
+    -fx-padding: 10;
+}
